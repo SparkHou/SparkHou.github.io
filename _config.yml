@@ -117,3 +117,5 @@ friends: [
         href: "http://wepiaofei.github.io/blog/"
     }
 ]
+
+port: 5000
