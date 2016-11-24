@@ -10,6 +10,7 @@ tags:
 ---
 
 > 这是《UnityShader入门精要》冯乐乐著的学习笔记
+
 # Unity Shader 基本光照模型
 
 ## 1. Shader基本框架
@@ -89,22 +90,27 @@ tags:
 #### 2.1.1 Phong模型
 ![Phong reflect.png-55kB][1]
 如何计算反射光线 **r** 请参考[如何计算反射光线](http://www.cnblogs.com/graphics/archive/2013/02/21/2920627.html)的连接。
+<div>
 $$ r=2(\hat n\cdot I)\hat n-\ I $$
+</div>
 >*注意：连接的入射光线和图片的方向相反，所以公式变号*
 
 用Phone模型计算高光发射：
+
 $$ c_{specular}=(c_{light}\cdot m_{specular})max(0,\widehat v\cdot r)^{m_{gloss}} $$
 
->*注意：带 $\land$* 上标的向量表示归一化之后的向量
+>*注意：带 $$ \land $$ * 上标的向量表示归一化之后的向量
 
 #### 2.1.2 Blinn模型
 ![Blinn reflect.png-44.4kB][2]
 Blinn模型提供了一个简单的方法来得到**类似的效果**，基本思想是避免计算反射向量$\hat r$，为此Blinn模型引入一个新的矢量$\hat h$他是通过$\hat v$和$\hat I$取平均后归一化得到：
-$$ \hat h=\frac{\hat v+I}{|\hat v+I|} $$
+<div> $$ \hat h=\frac{\hat v+I}{|\hat v+I|} $$ </div>
 然后使用$\hat n$和$\hat h$之间的夹角计算，Blinn模式公式如下：
+<div>
 $$
 c_{specular}=(c_{light}\cdot m_{specular})max(0,\hat n \cdot \hat h)^{m_{gloss}}
 $$
+</div>
 不能认为Blinn模型是对“正确的”Phong模型的近似，有些情况下Blinn模型更加符合实际情况。
 
 
@@ -119,19 +125,25 @@ $$
 ### 2.2 漫反射
 #### 2.2.1 兰伯特定律（Lambert's Law）
 **特点：在平面某点漫反射光的强度与该反射点的法线向量和入射光角度的余弦值成正比。**
+<div>
 $$
 c_{diffuse}=(c_{light} \cdot m_{diffuse})max(0,n \cdot I)
 $$
+</div>
 #### 2.2.2 半兰伯特模型（Half Lambert）
 兰伯特模型在光无法到达的地方是全黑的没有任何明暗变化，即使添加环境光得到非全黑的效果单仍然无法解决背光面明暗一样的结果。为此提出了半兰伯特模型。
 半兰伯特模型是valve公司在《半条命》开发是提出来的技术，是在兰伯特模型上的简单修改，广义定义：
+<div>
 $$
 c_{diffuse}=(c_{light} \cdot m_{diffuse})(\alpha (\hat n \cdot I)+\beta)
 $$
-可以看出半兰伯特模型没有使用$max$来防止产生负值而是进行了一个$\alpha$的缩放再进行了$\beta$的平移，绝大数情况$\alpha,\beta$为0.5。
+</div>
+可以看出半兰伯特模型没有使用$max$来防止产生负值而是进行了一个$$\alpha$$的缩放再进行了$$\beta$$的平移，绝大数情况$$\alpha,\beta$$为0.5。
+<div>
 $$
 c_{diffuse}=(c_{light} \cdot m_{diffuse})(0.5 (\hat n \cdot I)+0.5)
 $$
+</div>
 半兰伯特没有任何物理依据只是一种视觉加强技术。
 
 ## 3. Blinn-Phong模型unity shader代码示例
@@ -144,7 +156,7 @@ $$
     		_Gloss ("Gloss", Range(8.0, 256)) = 20
     	}
   	SubShader {
-  		Pass { 
+  		Pass {
   			Tags { "LightMode"="ForwardBase" }  
 
   			CGPROGRAM
